@@ -7,10 +7,11 @@ pytestmark = pytest.mark.integration
 CORPO = {"nome": "Ana", "text": "não entendi nada"}
 
 
-def test_raiz_responde_ok(client):
+def test_raiz_responde_ok(client, monkeypatch):
+    monkeypatch.delenv("APP_VERSION", raising=False)
     resposta = client.get("/")
     assert resposta.status_code == 200
-    assert resposta.json() == {"status": "ok"}
+    assert resposta.json() == {"status": "ok", "version": "dev"}
 
 
 def test_post_predictions_devolve_predicao_de_cada_modelo_e_mensagem(client):
